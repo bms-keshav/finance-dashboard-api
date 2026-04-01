@@ -6,10 +6,12 @@ const successResponse = (res, message, data, statusCode = 200) => {
     });
 };
 
-const errorResponse = (res, message, statusCode = 500) => {
+const errorResponse = (res, statusCode = 500, errorCode = 'ERROR', message, errors = null) => {
     return res.status(statusCode).json({
         success: false,
+        errorCode,
         message,
+        ...(errors && { errors }) 
     });
 };
 
