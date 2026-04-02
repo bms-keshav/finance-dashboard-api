@@ -122,8 +122,8 @@ Use these credentials to test the API with different user roles.
 | Method   | Path   | Auth  | Role(s)                | Description                  |
 | :------- | :----- | :---- | :--------------------- | :--------------------------- |
 | `POST`   | `/`    | Yes   | `ADMIN`                | Creates a new financial record. |
-| `GET`    | `/`    | Yes   | `VIEWER`, `ANALYST`, `ADMIN` | Retrieves a list of records with filtering. |
-| `GET`    | `/:id` | Yes   | `VIEWER`, `ANALYST`, `ADMIN` | Retrieves a single record by ID. |
+| `GET`    | `/`    | Yes   | `ANALYST`, `ADMIN` | Retrieves a list of records with filtering. |
+| `GET`    | `/:id` | Yes   | `ANALYST`, `ADMIN` | Retrieves a single record by ID. |
 | `PATCH`  | `/:id` | Yes   | `ADMIN`                | Updates a specific record.   |
 | `DELETE` | `/:id` | Yes   | `ADMIN`                | Soft deletes a record.       |
 
@@ -131,9 +131,9 @@ Use these credentials to test the API with different user roles.
 
 | Method | Path          | Auth  | Role(s)           | Description                  |
 | :----- | :------------ | :---- | :---------------- | :--------------------------- |
-| `GET`  | `/summary`    | Yes   | `ANALYST`, `ADMIN` | Gets a summary of finances (totals, net balance). |
-| `GET`  | `/by-category`| Yes   | `ANALYST`, `ADMIN` | Gets financial totals grouped by category. |
-| `GET`  | `/trends`     | Yes   | `ANALYST`, `ADMIN` | Gets monthly income and expense trends. |
+| `GET`  | `/summary`    | Yes   | `VIEWER`, `ANALYST`, `ADMIN` | Gets a summary of finances (totals, net balance). |
+| `GET`  | `/by-category`| Yes   | `VIEWER`, `ANALYST`, `ADMIN` | Gets financial totals grouped by category. |
+| `GET`  | `/trends`     | Yes   | `VIEWER`, `ANALYST`, `ADMIN` | Gets monthly income and expense trends. |
 
 ## Design Decisions
 
@@ -149,5 +149,5 @@ Use these credentials to test the API with different user roles.
 
 -   The application assumes it will be run in an environment where Node.js and MongoDB are available.
 -   It is assumed that the `JWT_SECRET` in the `.env` file will be replaced with a strong, securely generated secret in a production environment.
--   The default user created via the `/register` endpoint will have the `VIEWER` role unless specified otherwise (though the current implementation doesn't allow role specification on register for security).
+-   The default user created via the `/register` endpoint always receives the `VIEWER` role. Role assignment is restricted to admin-only user management APIs.
 -   Date strings provided to the API for filtering or creation are expected to be in a format that JavaScript's `new Date()` can parse correctly (e.g., ISO 8601 format).

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const User = require('./src/modules/users/user.model');
 const Record = require('./src/modules/records/record.model');
 
@@ -8,10 +7,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const seedDatabase = async () => {
     try {
-        await mongoose.connect(MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(MONGODB_URI);
         console.log('MongoDB connected for seeding...');
 
         // 1. Delete all existing data
@@ -27,8 +23,12 @@ const seedDatabase = async () => {
         ];
 
         const createdUsers = await Promise.all(usersData.map(async (userData) => {
-            const passwordHash = await bcrypt.hash(userData.password, 10);
-            return new User({ ...userData, passwordHash }).save();
+            return new User({
+                name: userData.name,
+                email: userData.email,
+                role: userData.role,
+                passwordHash: userData.password,
+            }).save();
         }));
 
         console.log(`Created ${createdUsers.length} users.`);

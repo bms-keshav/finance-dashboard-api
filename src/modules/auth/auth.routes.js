@@ -10,6 +10,7 @@ router.post(
         check('name', 'Name is required').not().isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password', 'Password must be at least 6 characters').isLength({ min: 6 }),
+        check('role', 'Role cannot be set during registration').not().exists(),
     ],
     authController.register
 );

@@ -29,8 +29,25 @@ app.use((req, res, next) => {
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
     console.error('Unhandled Error:', err);
+
+    if (err.name === 'CastError') {
+        return errorResponse(res, 400, 'VALIDATION_ERROR', `Invalid value for ${err.path}`);
+    }
+
+    if (err.name === 'ValidationError') {
+        const errors = Object.values(err.errors).map((e) => ({
+            field: e.path,
+            message: e.message,
+        }));
+        return errorResponse(res, 400, 'VALIDATION_ERROR', 'Validation failed', errors);
+    }
+
+    if (err.code === 11000) {
+        return errorResponse(res, 409, 'CONFLICT', 'Duplicate value violates a unique constraint.');
+    }
+
     const message = process.env.NODE_ENV === 'production' ? 'An unexpected error occurred.' : err.message;
-    errorResponse(res, 500, 'INTERNAL_ERROR', message);
+    return errorResponse(res, 500, 'INTERNAL_ERROR', message);
 });
 
 module.exports = app;

@@ -14,12 +14,12 @@ const recordSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        indexed: true,
+        index: true,
     },
     date: {
         type: Date,
         required: true,
-        indexed: true,
+        index: true,
     },
     notes: {
         type: String,

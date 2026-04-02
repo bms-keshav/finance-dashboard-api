@@ -52,7 +52,7 @@ const findUserByEmail = async (email) => {
  * @returns {Promise<User>}
  */
 const updateUserRole = async (id, role) => {
-    return User.findByIdAndUpdate(id, { role }, { new: true, runValidators: true });
+    return User.findByIdAndUpdate(id, { role }, { returnDocument: 'after', runValidators: true });
 };
 
 /**
@@ -62,7 +62,7 @@ const updateUserRole = async (id, role) => {
  * @returns {Promise<User>}
  */
 const updateUserStatus = async (id, status) => {
-    return User.findByIdAndUpdate(id, { status }, { new: true, runValidators: true });
+    return User.findByIdAndUpdate(id, { status }, { returnDocument: 'after', runValidators: true });
 };
 
 module.exports = {

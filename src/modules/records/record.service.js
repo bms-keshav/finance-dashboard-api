@@ -66,7 +66,16 @@ const getRecordById = async (id) => {
  * @returns {Promise<Record>}
  */
 const updateRecord = async (id, fields) => {
-    return Record.findOneAndUpdate({ _id: id, isDeleted: false }, fields, { new: true, runValidators: true });
+    const allowedFields = ['amount', 'type', 'category', 'date', 'notes'];
+    const updateFields = Object.fromEntries(
+        Object.entries(fields).filter(([key]) => allowedFields.includes(key))
+    );
+
+    return Record.findOneAndUpdate(
+        { _id: id, isDeleted: false },
+        updateFields,
+        { returnDocument: 'after', runValidators: true }
+    );
 };
 
 /**
@@ -75,7 +84,11 @@ const updateRecord = async (id, fields) => {
  * @returns {Promise<Record>}
  */
 const softDeleteRecord = async (id) => {
-    return Record.findOneAndUpdate({ _id: id, isDeleted: false }, { isDeleted: true }, { new: true });
+    return Record.findOneAndUpdate(
+        { _id: id, isDeleted: false },
+        { isDeleted: true },
+        { returnDocument: 'after' }
+    );
 };
 
 module.exports = {

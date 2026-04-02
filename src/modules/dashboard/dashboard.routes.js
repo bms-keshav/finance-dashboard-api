@@ -5,8 +5,8 @@ const requireRoles = require('../../middleware/rbac');
 
 const router = express.Router();
 
-// All dashboard routes require ANALYST or ADMIN role
-router.use(verifyToken, requireRoles(['ANALYST', 'ADMIN']));
+// Dashboard routes are readable by all roles.
+router.use(verifyToken, requireRoles(['VIEWER', 'ANALYST', 'ADMIN']));
 
 router.get('/summary', dashboardController.getSummary);
 router.get('/by-category', dashboardController.getCategoryTotals);

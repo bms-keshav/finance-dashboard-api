@@ -11,14 +11,15 @@ const register = async (req, res, next) => {
     }
 
     try {
-        const { email, name, password, role } = req.body;
+        const { email, name, password } = req.body;
 
         const existingUser = await userService.findUserByEmail(email);
         if (existingUser) {
             return errorResponse(res, 409, 'CONFLICT', 'User with this email already exists.');
         }
 
-        const newUser = await userService.createUser({ name, email, password, role });
+        // Role is intentionally not accepted from public registration.
+        const newUser = await userService.createUser({ name, email, password });
 
         successResponse(res, 201, newUser, 'User registered successfully.');
     } catch (err) {

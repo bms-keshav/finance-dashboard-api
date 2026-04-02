@@ -18,6 +18,11 @@ const createRecord = async (req, res, next) => {
 };
 
 const getAllRecords = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid query parameters', errors.array());
+    }
+
     try {
         const result = await recordService.getAllRecords(req.query);
         successResponse(res, 200, result, 'Records retrieved successfully');
@@ -27,6 +32,11 @@ const getAllRecords = async (req, res, next) => {
 };
 
 const getRecordById = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input', errors.array());
+    }
+
     try {
         const record = await recordService.getRecordById(req.params.id);
         if (!record) {
@@ -39,6 +49,11 @@ const getRecordById = async (req, res, next) => {
 };
 
 const updateRecord = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input', errors.array());
+    }
+
     try {
         const updatedRecord = await recordService.updateRecord(req.params.id, req.body);
         if (!updatedRecord) {
@@ -51,6 +66,11 @@ const updateRecord = async (req, res, next) => {
 };
 
 const deleteRecord = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return errorResponse(res, 400, 'VALIDATION_ERROR', 'Invalid input', errors.array());
+    }
+
     try {
         const deletedRecord = await recordService.softDeleteRecord(req.params.id);
         if (!deletedRecord) {
